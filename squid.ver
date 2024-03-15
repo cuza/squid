@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 # set squid version
-SQUID_VER="6.7"
+SQUID_VER="6.8"
