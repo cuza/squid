@@ -6,6 +6,9 @@ on:
       - main
     tags:
       - '*'
+  pull_request:
+    types:
+      - opened
 
 jobs:
   build:
