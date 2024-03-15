@@ -1,0 +1,68 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        container: ['debian:11', 'debian:12', 'ubuntu:20.04', 'ubuntu:22.04']
+    container:
+      image: ${{ matrix.container }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build squid
+        run: bash build.sh
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v2
+        with:
+          name: packages
+          path: ./pkgs/*.deb
+
+      - name: Create release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "./pkgs/*.deb"
+          tag: ${{ github.ref_name }}
+
+
+  # release:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Download artifacts
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: package
+
+  #     - name: Create Release
+  #       id: create_release
+  #       uses: actions/create-release@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         tag_name: ${{ github.ref }}
+  #         release_name: Release ${{ github.ref }}
+  #         draft: false
+  #         prerelease: false
+
+  #     - name: Upload Release Asset
+  #       id: upload-release-asset 
+  #       uses: actions/upload-release-asset@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         upload_url: ${{ steps.create_release.outputs.upload_url }}
+  #         asset_path: ./package/*.deb
+  #         asset_name: package.deb
+  #         asset_content_type: application/octet-stream
