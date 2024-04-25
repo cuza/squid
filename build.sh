@@ -67,7 +67,7 @@ SQUID_GIT_TAG="SQUID_${SQUID_VER//./_}"
 pushd build/squid
 
 # get squid source code from github
-git clone https://github.com/squid-cache/squid.git squid-${SQUID_VER}
+git clone --branch ${SQUID_VER} https://github.com/squid-cache/squid.git
 cd squid-${SQUID_VER} && \
 git fetch --tags --prune && \
 # checkout the version we want to build
