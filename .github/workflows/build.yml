@@ -14,8 +14,10 @@ jobs:
     strategy:
       matrix:
         container: ['debian:11', 'debian:12', 'ubuntu:20.04', 'ubuntu:22.04', 'ubuntu:24.04']
+        arch: ['amd64', 'arm/v7', 'arm64/v8']
     container:
       image: ${{ matrix.container }}
+      options: --platform linux/${{ matrix.arch }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -26,7 +28,7 @@ jobs:
       - name: Upload packages
         uses: actions/upload-artifact@v4
         with:
-          name: packages
+          name: debian-package-${{ matrix.container }}-${{ matrix.arch }}
           path: ./pkgs/*.deb
   
   release:
@@ -37,7 +39,7 @@ jobs:
       - name: Download packages
         uses: actions/download-artifact@v4
         with:
-          name: packages
+          merge-multiple: true
           path: ./pkgs
       - name: Create release
         uses: ncipollo/release-action@v1
