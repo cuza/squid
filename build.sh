@@ -23,6 +23,7 @@ apt-get -y install \
     ed \
     msktutil \
     logrotate \
+    libtool-bin \
     libldap2-dev \
     libsasl2-dev \
     libssl-dev \
