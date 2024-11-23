@@ -55,7 +55,7 @@ jobs:
         base_image: ${{ matrix.base_image }}
         cpu: ${{ matrix.cpu }}
         cpu_info: ${{ matrix.cpu_info }}
-        bind_mount_repository: true
+        image_additional_mb: 1000
         optimize_image: no
         commands: |
             bash build.sh
