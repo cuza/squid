@@ -18,13 +18,13 @@ jobs:
       image: ${{ matrix.container }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Build squid
         run: bash build.sh
 
       - name: Upload packages
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: packages
           path: ./pkgs/*.deb
@@ -35,7 +35,7 @@ jobs:
     needs: build
     steps:
       - name: Download packages
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: packages
           path: ./pkgs
