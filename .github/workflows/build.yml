@@ -45,7 +45,7 @@ jobs:
         - arch: aarch64
           cpu: cortex-a53
           base_image: raspios_lite_arm64:latest
-          cpu_info: cpuinfo/raspberrypi_zero2_w_arm64_w
+          cpu_info: cpuinfo/raspberrypi_zero2_w_arm64
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -60,7 +60,7 @@ jobs:
     - name: Upload packages
       uses: actions/upload-artifact@v4
       with:
-        name: debian-package-${{ hashFiles('./pkgs/*.deb') }}
+        name: debian-package-arm-${{ hashFiles('./pkgs/*.deb') }}
         path: ./pkgs/*.deb
   release:
     if: startsWith(github.ref, 'refs/tags/')
