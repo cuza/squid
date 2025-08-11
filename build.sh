@@ -11,6 +11,11 @@ apt-get update && apt-get -y upgrade
 # install build tooling and header packages for squid 6
 apt-get -y install \
     acl \
+    winbind \
+    libnss-winbind \
+    libpam-winbind \
+    krb5-user \
+    samba-common \
     attr \
     bison \
     nettle-dev \
@@ -82,7 +87,7 @@ git checkout -b $SQUID_VER $SQUID_GIT_TAG
         --enable-delay-pools --enable-cache-digests --enable-icap-client --enable-ecap --enable-follow-x-forwarded-for \
         --with-large-files --with-filedescriptors=65536 --with-default-user=proxy \
         --enable-auth-basic=DB,fake,getpwnam,LDAP,NCSA,PAM,POP3,RADIUS,SASL,SMB \
-        --enable-auth-digest=file,LDAP --enable-auth-negotiate=kerberos,wrapper --enable-auth-ntlm=fake,SMB_LM \
+        --enable-auth-digest=file,LDAP --enable-auth-negotiate=kerberos,wrapper --enable-auth-ntlm=fake,SSPI \
         --enable-linux-netfilter --with-swapdir=/var/cache/squid --enable-useragent-log --enable-htpc \
         --infodir=/usr/share/info --mandir=/usr/share/man --includedir=/usr/include --disable-maintainer-mode \
         --disable-dependency-tracking --disable-silent-rules --enable-inline --enable-async-io \
