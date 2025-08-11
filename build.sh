@@ -104,7 +104,7 @@ git checkout -b $SQUID_VER $SQUID_GIT_TAG
         --provides=squid \
         --pkgversion=${SQUID_VER} \
         --pkgarch=$(dpkg --print-architecture) \
-        --pkgrelease=${ID}-${VERSION_CODENAME} \
+        --pkgrelease=${ID}-${VERSION_CODENAME}-$(uname -m) \
         --pakdir=${CI_BUILD_ROOT}/pkgs \
         --maintainer="Dave Cuza \<dave@cuza.dev\>" \
         --conflicts="squid5" \
