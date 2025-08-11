@@ -87,7 +87,7 @@ git checkout -b $SQUID_VER $SQUID_GIT_TAG
         --enable-delay-pools --enable-cache-digests --enable-icap-client --enable-ecap --enable-follow-x-forwarded-for \
         --with-large-files --with-filedescriptors=65536 --with-default-user=proxy \
         --enable-auth-basic \
-        --enable-auth-digest=file,LDAP --enable-auth-negotiate=kerberos,wrapper --enable-auth-ntlm=fake,SSPI \
+        --enable-auth-digest=file,LDAP --enable-auth-negotiate=kerberos,wrapper --enable-auth-ntlm \
         --enable-linux-netfilter --with-swapdir=/var/cache/squid --enable-useragent-log --enable-htpc \
         --infodir=/usr/share/info --mandir=/usr/share/man --includedir=/usr/include --disable-maintainer-mode \
         --disable-dependency-tracking --disable-silent-rules --enable-inline --enable-async-io \
