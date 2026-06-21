@@ -41,6 +41,7 @@ apt-get -y install \
     libpam0g-dev \
     libblkid-dev \
     libbsd-dev \
+    libcrypt-dev \
     libcap2-dev \
     libattr1-dev \
     libacl1-dev \

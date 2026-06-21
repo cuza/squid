@@ -13,6 +13,7 @@ jobs:
     name: Build ${{ matrix.container.name }} (${{ matrix.architecture.name }})
     runs-on: ${{ matrix.architecture.runner }}
     strategy:
+      fail-fast: false
       matrix:
         architecture:
           - name: amd64
