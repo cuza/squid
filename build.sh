@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 1>&2
    exit 1
@@ -39,6 +41,7 @@ apt-get -y install \
     libpam0g-dev \
     libblkid-dev \
     libbsd-dev \
+    libcrypt-dev \
     libcap2-dev \
     libattr1-dev \
     libacl1-dev \
@@ -70,6 +73,7 @@ source /etc/os-release
 # set squid version
 source squid.ver
 SQUID_GIT_TAG="SQUID_${SQUID_VER//./_}"
+PKG_ARCH="$(dpkg --print-architecture)"
 
 # decend into working directory
 pushd build/squid
@@ -105,7 +109,7 @@ git checkout -b $SQUID_VER $SQUID_GIT_TAG
         --pkgname=squid \
         --provides=squid \
         --pkgversion=${SQUID_VER} \
-        --pkgarch=$(dpkg --print-architecture) \
+        --pkgarch=${PKG_ARCH} \
         --pkgrelease=${ID}-${VERSION_CODENAME} \
         --pakdir=${CI_BUILD_ROOT}/pkgs \
         --maintainer="Dave Cuza \<dave@cuza.dev\>" \
@@ -128,6 +132,26 @@ git checkout -b $SQUID_VER $SQUID_GIT_TAG
                     libsystemd-dev, \
                     libtdb-dev, \
                     libltdl7" \
-        make -j`nproc` install
+        make -j"$(nproc)" install
+
+shopt -s nullglob
+packages=("${CI_BUILD_ROOT}"/pkgs/*.deb)
+if (( ${#packages[@]} == 0 )); then
+    echo "No packages were created" 1>&2
+    exit 1
+fi
+
+for pkg in "${CI_BUILD_ROOT}"/pkgs/*.deb; do
+    if [[ "$(basename "${pkg}")" != *"_${PKG_ARCH}.deb" ]]; then
+        arch_pkg="${pkg%.deb}_${PKG_ARCH}.deb"
+        if [[ -e "${arch_pkg}" ]]; then
+            echo "Refusing to overwrite existing package: ${arch_pkg}" 1>&2
+            exit 1
+        fi
+        mv "${pkg}" "${arch_pkg}"
+    fi
+done
+shopt -u nullglob
+
 # and revert
 popd
