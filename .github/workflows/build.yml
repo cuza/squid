@@ -1,4 +1,4 @@
-name: Build and Release
+name: Build Packages
 
 on:
   push:
@@ -10,6 +10,7 @@ on:
 
 jobs:
   build:
+    name: Build ${{ matrix.container.name }} (${{ matrix.architecture.name }})
     runs-on: ${{ matrix.architecture.runner }}
     strategy:
       matrix:
@@ -48,6 +49,7 @@ jobs:
           path: ./pkgs/*.deb
 
   release:
+    name: Release Packages
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     needs: build
